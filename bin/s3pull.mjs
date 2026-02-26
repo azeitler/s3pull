@@ -2,9 +2,9 @@
 
 import { basename } from "node:path";
 import { loadConfig } from "../lib/config.mjs";
-import { createS3Client } from "../lib/s3.mjs";
 import { pullFixture } from "../lib/download.mjs";
 import * as log from "../lib/log.mjs";
+import { createS3Client } from "../lib/s3.mjs";
 
 const args = process.argv.slice(2);
 
@@ -41,15 +41,19 @@ Environment:
   process.exit(key ? 0 : 1);
 }
 
-try {
-  const config = await loadConfig();
-  const s3 = createS3Client(config);
-  const result = await pullFixture(s3, key, destDir);
+async function main() {
+  try {
+    const config = await loadConfig();
+    const s3 = createS3Client(config);
+    const result = await pullFixture(s3, key, destDir);
 
-  if (result.status === "error") {
+    if (result.status === "error") {
+      process.exit(1);
+    }
+  } catch (err) {
+    log.error(err.message);
     process.exit(1);
   }
-} catch (err) {
-  log.error(err.message);
-  process.exit(1);
 }
+
+main();

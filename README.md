@@ -1,3 +1,7 @@
+[![npm version](https://img.shields.io/npm/v/s3pull)](https://www.npmjs.com/package/s3pull)
+[![CI](https://github.com/azeitler/s3pull/actions/workflows/ci.yml/badge.svg)](https://github.com/azeitler/s3pull/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # s3pull
 
 Thin CLI to download files from S3-compatible storage with ETag-based local caching and YAML manifest support.
@@ -6,11 +10,27 @@ Works with any S3-compatible backend: AWS S3, Hetzner Object Storage, MinIO, Dig
 
 ## Install
 
+### npm / yarn
+
 ```sh
 npm install -g s3pull
 # or per-project
 yarn add --dev s3pull
 ```
+
+### Standalone binary
+
+Download a prebuilt binary from [GitHub Releases](https://github.com/azeitler/s3pull/releases) — no Node.js required.
+
+| Platform | Download |
+|---|---|
+| Linux x64 | `s3pull-linux-x64.tar.gz` |
+| Linux arm64 | `s3pull-linux-arm64.tar.gz` |
+| macOS x64 | `s3pull-darwin-x64.tar.gz` |
+| macOS arm64 | `s3pull-darwin-arm64.tar.gz` |
+| Windows x64 | `s3pull-win-x64.zip` |
+
+Extract and place the binaries in your `PATH`.
 
 ## Quick Start
 
@@ -122,6 +142,10 @@ The cache is shared across all projects on the same machine.
 ```
 fixtures/
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, testing, and pull request guidelines.
 
 ## License
 

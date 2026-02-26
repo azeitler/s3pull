@@ -1,0 +1,7 @@
+{
+  "main": "dist/s3pull.cjs",
+  "output": "dist/s3pull-sea-prep.blob",
+  "disableExperimentalSEAWarning": true,
+  "useSnapshot": false,
+  "useCodeCache": false
+}

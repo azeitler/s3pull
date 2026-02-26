@@ -2,10 +2,10 @@
 
 import { basename } from "node:path";
 import { loadConfig } from "../lib/config.mjs";
-import { createS3Client } from "../lib/s3.mjs";
-import { loadManifest } from "../lib/manifest.mjs";
 import { pullFixture } from "../lib/download.mjs";
 import * as log from "../lib/log.mjs";
+import { loadManifest } from "../lib/manifest.mjs";
+import { createS3Client } from "../lib/s3.mjs";
 
 const args = process.argv.slice(2);
 
@@ -27,29 +27,35 @@ Environment:
   process.exit(0);
 }
 
-try {
-  const config = await loadConfig();
-  const s3 = createS3Client(config);
-  const entries = await loadManifest(process.cwd());
+async function main() {
+  try {
+    const config = await loadConfig();
+    const s3 = createS3Client(config);
+    const entries = await loadManifest(process.cwd());
 
-  let downloaded = 0;
-  let cached = 0;
-  let errors = 0;
+    let downloaded = 0;
+    let cached = 0;
+    let errors = 0;
 
-  for (const entry of entries) {
-    const result = await pullFixture(s3, entry.key, entry.destDir, entry.destName);
-    if (result.status === "downloaded") downloaded++;
-    else if (result.status === "cached") cached++;
-    else errors++;
-  }
+    for (const entry of entries) {
+      const result = await pullFixture(s3, entry.key, entry.destDir, entry.destName);
+      if (result.status === "downloaded") downloaded++;
+      else if (result.status === "cached") cached++;
+      else errors++;
+    }
 
-  log.info("");
-  log.info(`${entries.length} files: ${downloaded} downloaded, ${cached} cached, ${errors} errors`);
+    log.info("");
+    log.info(
+      `${entries.length} files: ${downloaded} downloaded, ${cached} cached, ${errors} errors`,
+    );
 
-  if (errors > 0) {
+    if (errors > 0) {
+      process.exit(1);
+    }
+  } catch (err) {
+    log.error(err.message);
     process.exit(1);
   }
-} catch (err) {
-  log.error(err.message);
-  process.exit(1);
 }
+
+main();
