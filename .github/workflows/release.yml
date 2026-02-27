@@ -49,16 +49,15 @@ jobs:
             Linux) PLATFORM="linux" ;;
           esac
           bash scripts/sea.sh s3pull "$PLATFORM"
-          bash scripts/sea.sh s3pull-all "$PLATFORM"
 
       - name: Package binaries
         shell: bash
         run: |
           mkdir -p release
           if [ "${{ runner.os }}" = "Windows" ]; then
-            7z a release/s3pull-${{ matrix.target }}.zip dist/s3pull.exe dist/s3pull-all.exe
+            7z a release/s3pull-${{ matrix.target }}.zip dist/s3pull.exe
           else
-            tar czf release/s3pull-${{ matrix.target }}.tar.gz -C dist s3pull s3pull-all
+            tar czf release/s3pull-${{ matrix.target }}.tar.gz -C dist s3pull
           fi
 
       - uses: actions/upload-artifact@v4

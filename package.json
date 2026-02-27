@@ -4,8 +4,7 @@
   "description": "Thin S3 download CLI with ETag-based local caching and YAML manifest support",
   "type": "module",
   "bin": {
-    "s3pull": "./bin/s3pull.mjs",
-    "s3pull-all": "./bin/s3pull-all.mjs"
+    "s3pull": "./bin/s3pull.mjs"
   },
   "files": [
     "bin/",

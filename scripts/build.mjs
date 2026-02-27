@@ -1,7 +1,7 @@
 import esbuild from "esbuild";
 
 await esbuild.build({
-  entryPoints: ["bin/s3pull.mjs", "bin/s3pull-all.mjs"],
+  entryPoints: ["bin/s3pull.mjs"],
   bundle: true,
   platform: "node",
   target: "node22",
@@ -11,4 +11,4 @@ await esbuild.build({
   outExtension: { ".js": ".cjs" },
 });
 
-console.log("Built dist/s3pull.cjs and dist/s3pull-all.cjs");
+console.log("Built dist/s3pull.cjs");
