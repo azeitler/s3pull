@@ -1,6 +1,6 @@
 {
   "name": "s3pull",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Thin S3 download CLI with ETag-based local caching and YAML manifest support",
   "type": "module",
   "bin": {
