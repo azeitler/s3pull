@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.0](https://github.com/azeitler/s3pull/compare/s3pull-v0.3.0...s3pull-v0.4.0) (2026-02-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* s3pull-all binary removed, use `s3pull all` instead.
+
+### Features
+
+* consolidate CLI into single s3pull binary with subcommands ([bdf0907](https://github.com/azeitler/s3pull/commit/bdf09070420d11832ae1e11c7e10d6f741718a4d))
+
 ## [0.3.0](https://github.com/azeitler/s3pull/compare/s3pull-v0.2.0...s3pull-v0.3.0) (2026-02-27)
 
 
