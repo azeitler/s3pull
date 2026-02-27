@@ -65,4 +65,43 @@ describe("config", () => {
     expect(config.accessKey).toBe("key");
     expect(config.region).toBeUndefined();
   });
+
+  it("merges manifest config with env vars", async () => {
+    process.env.S3PULL_ACCESS_KEY = "env-key";
+    process.env.S3PULL_SECRET_KEY = "env-secret";
+
+    const { loadConfig } = await import("../lib/config.mjs");
+    const config = await loadConfig({
+      endpoint: "https://manifest.example.com",
+      bucket: "manifest-bucket",
+      region: "eu-west-1",
+    });
+
+    expect(config.accessKey).toBe("env-key");
+    expect(config.secretKey).toBe("env-secret");
+    expect(config.endpoint).toBe("https://manifest.example.com");
+    expect(config.bucket).toBe("manifest-bucket");
+    expect(config.region).toBe("eu-west-1");
+  });
+
+  it("env vars override manifest config", async () => {
+    process.env.S3PULL_ACCESS_KEY = "env-key";
+    process.env.S3PULL_SECRET_KEY = "env-secret";
+    process.env.S3PULL_ENDPOINT = "https://env.example.com";
+    process.env.S3PULL_BUCKET = "env-bucket";
+
+    const { loadConfig } = await import("../lib/config.mjs");
+    const config = await loadConfig({
+      endpoint: "https://manifest.example.com",
+      bucket: "manifest-bucket",
+    });
+
+    expect(config.endpoint).toBe("https://env.example.com");
+    expect(config.bucket).toBe("env-bucket");
+  });
+
+  it("mentions s3pull.yml in error message", async () => {
+    const { loadConfig } = await import("../lib/config.mjs");
+    await expect(loadConfig()).rejects.toThrow("s3pull.yml");
+  });
 });

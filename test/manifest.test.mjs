@@ -2,7 +2,7 @@ import { mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { loadManifest } from "../lib/manifest.mjs";
+import { loadManifest, loadManifestConfig } from "../lib/manifest.mjs";
 
 describe("manifest", () => {
   let testDir;
@@ -84,5 +84,59 @@ describe("manifest", () => {
     await writeFile(join(testDir, "s3pull.yml"), "files:\n  - as: renamed.bin\n");
 
     await expect(loadManifest(testDir)).rejects.toThrow('missing required "key" field');
+  });
+});
+
+describe("loadManifestConfig", () => {
+  let testDir;
+
+  beforeEach(async () => {
+    testDir = join(tmpdir(), `s3pull-test-cfg-${Date.now()}`);
+    await mkdir(testDir, { recursive: true });
+  });
+
+  afterEach(async () => {
+    await rm(testDir, { recursive: true, force: true });
+  });
+
+  it("returns config section from manifest", async () => {
+    await writeFile(
+      join(testDir, "s3pull.yml"),
+      "config:\n  endpoint: https://s3.example.com\n  bucket: my-bucket\n  region: eu-central-1\nfiles:\n  - key: test.txt\n",
+    );
+
+    const cfg = await loadManifestConfig(testDir);
+    expect(cfg).toEqual({
+      endpoint: "https://s3.example.com",
+      bucket: "my-bucket",
+      region: "eu-central-1",
+    });
+  });
+
+  it("returns empty object when no manifest exists", async () => {
+    const cfg = await loadManifestConfig(testDir);
+    expect(cfg).toEqual({});
+  });
+
+  it("returns empty object when manifest has no config section", async () => {
+    await writeFile(join(testDir, "s3pull.yml"), "files:\n  - key: test.txt\n");
+
+    const cfg = await loadManifestConfig(testDir);
+    expect(cfg).toEqual({});
+  });
+
+  it("strips credentials and only returns allowed keys", async () => {
+    await writeFile(
+      join(testDir, "s3pull.yml"),
+      "config:\n  endpoint: https://s3.example.com\n  bucket: my-bucket\n  accessKey: leaked\n  secretKey: leaked\n",
+    );
+
+    const cfg = await loadManifestConfig(testDir);
+    expect(cfg).toEqual({
+      endpoint: "https://s3.example.com",
+      bucket: "my-bucket",
+    });
+    expect(cfg.accessKey).toBeUndefined();
+    expect(cfg.secretKey).toBeUndefined();
   });
 });
