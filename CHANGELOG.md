@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/azeitler/s3pull/compare/s3pull-v0.2.0...s3pull-v0.3.0) (2026-02-27)
+
+
+### Features
+
+* support per-project config via s3pull.yml ([65c6038](https://github.com/azeitler/s3pull/commit/65c6038c3eb70ec98b0633864613c73d5ad42a5c))
+
 ## [0.2.0](https://github.com/azeitler/s3pull/compare/s3pull-v0.1.0...s3pull-v0.2.0) (2026-02-27)
 
 
