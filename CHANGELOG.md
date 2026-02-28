@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/azeitler/s3pull/compare/s3pull-v0.4.0...s3pull-v0.5.0) (2026-02-28)
+
+
+### Features
+
+* add interactive setup command ([7c92c6f](https://github.com/azeitler/s3pull/commit/7c92c6fbbe18939e948849530a6f2a8078565ae4))
+
 ## [0.4.0](https://github.com/azeitler/s3pull/compare/s3pull-v0.3.0...s3pull-v0.4.0) (2026-02-27)
 
 
