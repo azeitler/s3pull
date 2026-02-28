@@ -6,6 +6,7 @@ import { pullFixture } from "../lib/download.mjs";
 import * as log from "../lib/log.mjs";
 import { loadManifest, loadManifestConfig } from "../lib/manifest.mjs";
 import { createS3Client } from "../lib/s3.mjs";
+import { runSetup } from "../lib/setup.mjs";
 
 const require = createRequire(import.meta.url);
 const { version } = require("../package.json");
@@ -25,6 +26,7 @@ if (args.length === 0 || args.includes("--help") || args.includes("-h") || args[
 Usage:
   s3pull <s3-key> [--dest <dir>]   Download a single file from S3
   s3pull all                        Download all files from s3pull.yml
+  s3pull setup [--global]           Configure S3 connection
   s3pull --version                  Print version
   s3pull --help                     Show this help
 
@@ -82,6 +84,11 @@ if (args[0] === "all") {
     }
   }
   runAll();
+} else if (args[0] === "setup") {
+  runSetup(args.slice(1)).catch((err) => {
+    log.error(err.message);
+    process.exit(1);
+  });
 } else {
   // Single file download
   // Parse --dest flag
